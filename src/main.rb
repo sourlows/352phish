@@ -58,6 +58,6 @@ end
 #MAIN ENTRY POINT
 getUserOptions
 pp VictimList.instance.victims if $test
-EmailHandler.instance.getUserQuery if ($test && $file)
+EmailHandler.instance.getUserQuery if $file
 
 private :parseInput, :acquireTargetAPIs, :getVictims, :getUserOptions, :generateEmails

@@ -20,12 +20,13 @@ class EmailHandler
   def parseInputEmail
 	puts "extracting query terms from #{$file}" if $verbose
 	
-	terms = Array.new
-	
 	s = IO.read($file)
+	terms = s.scan(/(?<=\[)(.*?)(?=\])/)
+	
+	abort("template did not contain any query terms") if terms.count <1
 	
 	pp(s) if $test
-	
+	pp(terms) if $verbose
   end
   
   def writeEmailToDisk
