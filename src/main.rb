@@ -7,6 +7,7 @@ require_relative "lib/trollop"
 require 'pp'
 require_relative "victim"
 require_relative "victimList"
+require_relative "emailHandler"
 
 #the list of APIs to send queries to
 targetAPIs = Array.new
@@ -29,6 +30,8 @@ end
 def getVictims
 end
 
+# determines which option flags have been set by command line invocation and sets corresponding global variables appropriately
+# the --test flag should not be used by anyone who doesn't know what they are doing or you'll get unanticipated behaviour
 def getUserOptions
   opts = Trollop::options do
     opt :verbose, "print out all kinds of information about http requests"
@@ -51,7 +54,10 @@ end
 def generateEmails
 end
 
+
+#MAIN ENTRY POINT
 getUserOptions
-if $test
-  pp VictimList.instance.victims
-end
+pp VictimList.instance.victims if $test
+EmailHandler.instance.getUserQuery if ($test && $file)
+
+private :parseInput, :acquireTargetAPIs, :getVictims, :getUserOptions, :generateEmails
