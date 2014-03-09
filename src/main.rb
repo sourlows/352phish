@@ -3,7 +3,7 @@
 #email: djw223@mail.usask.ca
 #ruby version: 1.9.3p448
 #library version: 1.9.1
-require_relative "lib/trollop"
+require 'trollop'
 require 'pp'
 require_relative "victim"
 require_relative "victimList"
