@@ -9,7 +9,8 @@ class EmailHandler
   include Singleton
   
   def getUserQuery
-    parseInputEmail
+    querySet = parseInputEmail()
+	return querySet
   end
   
   def compose
@@ -25,8 +26,8 @@ class EmailHandler
 	
 	abort("template did not contain any query terms") if terms.count <1
 	
-	pp(s) if $test
 	pp(terms) if $verbose
+	return terms
   end
   
   def writeEmailToDisk
