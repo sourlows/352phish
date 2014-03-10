@@ -93,9 +93,9 @@ end
 #MAIN ENTRY POINT
 getUserOptions
 pp VictimList.instance.victims if $test
-EmailHandler.instance.getUserQuery if $file
+querySet = EmailHandler.instance.getUserQuery if $file
 parseAuth if $auth
 targetAPIs.push(GithubAPI.new)
-targetAPIs.first.authenticate
+targetAPIs.first.canMakeQuery(querySet)
 
 private :parseInput, :acquireTargetAPIs, :getVictims, :getUserOptions, :generateEmails

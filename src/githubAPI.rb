@@ -9,8 +9,12 @@ require_relative "abstractAPI"
 require 'pp'
 
 class GithubAPI < AbstractAPI
+  def initialize
+    @supported = ["name", "email", "location", "company"]
+  end
+
   def authenticate
-    Octokit.connection_options[:ssl] = {:verify => false}
+    Octokit.connection_options[:ssl] = {:verify => false} #did this to make it easy for the marker to run it
     if $authDirectory.has_key?("Github")
 	  Octokit.configure do |c|
         c.login = $authDirectory["Github"]["id"]
@@ -24,5 +28,19 @@ class GithubAPI < AbstractAPI
 	  user = Octokit.user
 	  pp user
 	end
+  end
+  
+  def canMakeQuery(queryTerms)
+    queryTerms.count.times do |i|
+	
+	  if(!@supported.include?(queryTerms[i]))
+	    puts "can't make query using Github" if $verbose
+	    return false
+	  end
+	  
+	end
+	
+	puts "can make query using Github" if $verbose
+	return true
   end
 end

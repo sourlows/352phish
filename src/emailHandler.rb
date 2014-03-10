@@ -23,6 +23,7 @@ class EmailHandler
 	
 	s = IO.read($file)
 	terms = s.scan(/(?<=\[)(.*?)(?=\])/)
+	terms.flatten!
 	
 	abort("template did not contain any query terms") if terms.count <1
 	

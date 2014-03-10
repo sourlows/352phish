@@ -1,2 +1,2 @@
-dear [firstname],
-[politician] needs your helps in supporting their new bill! read all about it at http://www.legit.com
+dear [name],
+[company] needs your helps in supporting their new bill! read all about it at http://www.legit.com
