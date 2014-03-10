@@ -8,6 +8,7 @@ require 'pp'
 require_relative "victim"
 require_relative "victimList"
 require_relative "emailHandler"
+require_relative "githubAPI"
 
 #the list of APIs to send queries to
 targetAPIs = Array.new
@@ -94,5 +95,7 @@ getUserOptions
 pp VictimList.instance.victims if $test
 EmailHandler.instance.getUserQuery if $file
 parseAuth if $auth
+targetAPIs.push(GithubAPI.new)
+targetAPIs.first.authenticate
 
 private :parseInput, :acquireTargetAPIs, :getVictims, :getUserOptions, :generateEmails
