@@ -21,6 +21,11 @@ $test = false
 #the name of the file corresponding to the input email template
 $file = nil
 
+#the name of the file corresponding to the authorization information
+$auth = nil
+
+$authDirectory = Hash.new
+
 def parseInput
 end
 
@@ -36,15 +41,20 @@ def getUserOptions
   opts = Trollop::options do
     opt :verbose, "print out all kinds of information about http requests"
     opt :file, "specify an input email template file", :type => :string
+	opt :auth, "specify an file containing authentication info", :type => :string
     opt :test, "enable test functionality"
   end
   
   $verbose = opts[:verbose]
   $file = opts[:file]
+  $auth = opts[:auth]
   $test = opts[:test]
   
   #kill the program if the user specifies a non existent template file
   Trollop::die :file, "must exist" unless File.exist?($file) if $file
+  
+  #kill the program if the user specifies a non existent authorization file
+  Trollop::die :auth, "must exist" unless File.exist?($auth) if $auth
   
   if $test
     pp(opts)
@@ -54,10 +64,35 @@ end
 def generateEmails
 end
 
+def parseAuth
+  puts "extracting authentication information from #{$auth}" if $verbose
+  
+  s = IO.read($auth)
+  
+  apiNames = s.scan(/^([A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$)/)
+  ids = s.scan(/^id: ([A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$)/)
+  secrets = s.scan(/^secret: (.*$)/)
+  
+  apiNames.flatten!
+  ids.flatten!
+  secrets.flatten!
+  
+  if((apiNames.count != ids.count) || (apiNames.count != secrets.count) || (secrets.count != ids.count))
+    abort("invalid config file format, each entry must have a corresponding id and secret(password), see documentation")
+  end
+  
+  apiNames.count.times do |i|
+    $authDirectory[apiNames[i]] = { "id" => ids[i], "secret" => secrets[i] }
+  end
+  
+  pp $authDirectory if $verbose
+  
+end
 
 #MAIN ENTRY POINT
 getUserOptions
 pp VictimList.instance.victims if $test
 EmailHandler.instance.getUserQuery if $file
+parseAuth if $auth
 
 private :parseInput, :acquireTargetAPIs, :getVictims, :getUserOptions, :generateEmails
