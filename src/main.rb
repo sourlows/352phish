@@ -95,7 +95,14 @@ getUserOptions
 pp VictimList.instance.victims if $test
 querySet = EmailHandler.instance.getUserQuery if $file
 parseAuth if $auth
+
+#build a list of possible APIs to make our query for
 targetAPIs.push(GithubAPI.new)
-targetAPIs.first.canMakeQuery(querySet)
+targetAPIs.delete_if {|api| !api.canMakeQuery(querySet) }
+pp targetAPIs if $verbose
+
+targetAPIs.each { |api|
+  api.getQueryResults(querySet)
+}
 
 private :parseInput, :acquireTargetAPIs, :getVictims, :getUserOptions, :generateEmails

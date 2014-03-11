@@ -43,4 +43,18 @@ class GithubAPI < AbstractAPI
 	puts "can make query using Github" if $verbose
 	return true
   end
+  
+  def getQueryResults(queryTerms)
+    #authenticate with provided credentials
+    authenticate()
+	
+	Octokit.auto_paginate = true
+	#Octokit.per_page = 100
+	
+	userList = Octokit.all_users
+	userList.each { |usr|
+	  File.open("githubUsers.txt", 'a') { |file| file.write(usr) }
+	}
+	
+  end
 end
