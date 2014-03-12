@@ -48,12 +48,20 @@ class GithubAPI < AbstractAPI
     #authenticate with provided credentials
     authenticate()
 	
-	Octokit.auto_paginate = true
-	#Octokit.per_page = 100
+	Octokit.auto_paginate = false
+	Octokit.per_page = 100
 	
 	userList = Octokit.all_users
+	detailedUsers = Array.new
+	
 	userList.each { |usr|
-	  File.open("githubUsers.txt", 'a') { |file| file.write(usr) }
+	  detailedUsers.push(Octokit.user(usr.attrs[:login]))
+	}
+	
+	File.open("githubUsers.txt", 'w') { |file| 
+	  detailedUsers.each { |usr|
+	    file.puts(usr.attrs)
+      }	  
 	}
 	
   end
