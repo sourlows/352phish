@@ -22,9 +22,13 @@ class EmailHandler
 	puts "extracting query terms from #{$file}" if $verbose
 	
 	s = IO.read($file)
-	terms = s.scan(/(?<=\[)(.*?)(?=\])/)
-	terms.flatten!
 	
+	stringTerms = s.scan(/(?<=\[)(.*?)(?=\])/)
+	stringTerms.flatten!
+	
+	terms = stringTerms.map { |s| s.to_sym }
+	
+	#abort if we can't find at least one query term
 	abort("template did not contain any query terms") if terms.count <1
 	
 	pp(terms) if $verbose
