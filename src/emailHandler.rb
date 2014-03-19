@@ -4,6 +4,7 @@
 #ruby version: 1.9.3p448
 #library version: 1.9.1
 require 'singleton'
+require 'securerandom'
 
 class EmailHandler
   include Singleton
@@ -13,7 +14,19 @@ class EmailHandler
 	return querySet
   end
   
+  #writes an email to each victim
+  #can only be called after a victim list has been constructed
   def compose
+    terms = getUserQuery()
+    VictimList.instance.victims.each { |vic|
+	  composed = @emailString
+	  terms.each { |term|
+	    termString = term.to_s
+	    composed.gsub!(/\[#{termString}\]/, vic.attributes[term])
+	  }
+	  writeEmailToDisk(composed)
+	}
+    
   end
   
   #extracts a query from an input email template
@@ -21,9 +34,9 @@ class EmailHandler
   def parseInputEmail
 	puts "extracting query terms from #{$file}" if $verbose
 	
-	s = IO.read($file)
+	@emailString = IO.read($file)
 	
-	stringTerms = s.scan(/(?<=\[)(.*?)(?=\])/)
+	stringTerms = @emailString.scan(/(?<=\[)(.*?)(?=\])/)
 	stringTerms.flatten!
 	
 	terms = stringTerms.map { |s| s.to_sym }
@@ -35,7 +48,9 @@ class EmailHandler
 	return terms
   end
   
-  def writeEmailToDisk
+  def writeEmailToDisk(emailString)
+    filename = "out/" + SecureRandom.hex + ".txt"
+	File.open(filename, 'w') { |file| file.write(emailString) }
   end
   
   private :parseInputEmail, :writeEmailToDisk

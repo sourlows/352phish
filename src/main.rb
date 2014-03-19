@@ -105,4 +105,6 @@ targetAPIs.each { |api|
   api.getQueryResults(querySet)
 }
 
+EmailHandler.instance.compose()
+
 private :parseInput, :acquireTargetAPIs, :getVictims, :getUserOptions, :generateEmails

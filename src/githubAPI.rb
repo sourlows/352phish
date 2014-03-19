@@ -65,6 +65,12 @@ class GithubAPI < AbstractAPI
     detailedUsers.delete_if { |usr|
 	  queryTerms.any? {|term| !usr.attrs.key?(term) || usr.attrs[term].nil? || usr.attrs[term].empty?}
 	}
+	
+	#add users to the victims list
+	detailedUsers.each { |usr|
+	  victim = Victim.new(usr.attrs)
+	  VictimList.instance.victims.push(victim)
+	}
     
     #write each user in detailedUsers to a file for verification/testing/caching
     File.open("githubUsers.txt", 'w') { |file| 

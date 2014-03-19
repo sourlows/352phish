@@ -12,6 +12,8 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+src/out
+githubUsers.txt
 
 # YARD artifacts
 .yardoc
