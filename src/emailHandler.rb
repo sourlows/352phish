@@ -19,7 +19,7 @@ class EmailHandler
   def compose
     terms = getUserQuery()
     VictimList.instance.victims.each { |vic|
-	  composed = @emailString
+	  composed = String.new(@emailString)
 	  terms.each { |term|
 	    termString = term.to_s
 	    composed.gsub!(/\[#{termString}\]/, vic.attributes[term])

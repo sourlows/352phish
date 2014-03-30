@@ -4,6 +4,11 @@ GEM
     addressable (2.3.5)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    koala (1.8.0)
+      addressable
+      faraday
+      multi_json
+    multi_json (1.9.2)
     multipart-post (2.0.0)
     octokit (2.7.2)
       sawyer (~> 0.5.2)
@@ -16,5 +21,6 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  koala (~> 1.8.0rc1)
   octokit (~> 2.0)
   trollop

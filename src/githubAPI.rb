@@ -11,6 +11,7 @@ require 'pp'
 class GithubAPI < AbstractAPI
   def initialize
     @supported = [:name, :email, :location, :company]
+	@paginationLimit = 20
   end
 
   def authenticate
@@ -54,6 +55,9 @@ class GithubAPI < AbstractAPI
     
     #get a shallow list of users
     userList = Octokit.all_users
+	@paginationLimit.times do
+	  userList.concat Octokit.last_response.rels[:next].get.data
+	end
     detailedUsers = Array.new
     
     #get a deeper user object for each shallow user entry and store it in our detailedUsers arrays

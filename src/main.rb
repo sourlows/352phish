@@ -9,6 +9,7 @@ require_relative "victim"
 require_relative "victimList"
 require_relative "emailHandler"
 require_relative "githubAPI"
+require_relative "facebookAPI"
 
 #the list of APIs to send queries to
 targetAPIs = Array.new
@@ -98,6 +99,7 @@ parseAuth if $auth
 
 #build a list of possible APIs to make our query for
 targetAPIs.push(GithubAPI.new)
+targetAPIs.push(FacebookAPI.new)
 targetAPIs.delete_if {|api| !api.canMakeQuery(querySet) }
 pp targetAPIs if $verbose
 
