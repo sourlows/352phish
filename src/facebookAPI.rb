@@ -10,7 +10,7 @@ require 'pp'
 
 class FacebookAPI < AbstractAPI
   def initialize
-    @supported = [:name, :music, :email]
+    @supported = [:name, :music, :email, :politician, :book, :author, :software]
 	#@paginationLimit = 20
   end
 
@@ -104,6 +104,26 @@ class FacebookAPI < AbstractAPI
 	  queryTerms.push("Musician/band")
 	end
 	
+	if queryTerms.include?(:politician)
+	  queryTerms.delete(:politician)
+	  queryTerms.push("Politician")
+	end
+	
+	if queryTerms.include?(:book)
+	  queryTerms.delete(:book)
+	  queryTerms.push("Book")
+	end
+	
+	if queryTerms.include?(:author)
+	  queryTerms.delete(:author)
+	  queryTerms.push("Author")
+	end
+	
+	if queryTerms.include?(:software)
+	  queryTerms.delete(:software)
+	  queryTerms.push("Software")
+	end
+	
 	return queryTerms
   end
   
@@ -111,6 +131,14 @@ class FacebookAPI < AbstractAPI
     case term
 	when "Musician/band"
 	  return :music
+	when "Politician"
+	  return :politician
+	when "Author"
+	  return :author
+	when "Book"
+	  return :book
+	when "Software"
+	  return :software
 	else
 	  return :null
 	end

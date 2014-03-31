@@ -1,3 +1,4 @@
-dear [name],
-[music] is releasing a new album and you be the first to hear their new streaming single. 
-Just log in with your Facebook account at http://totallylegit.com/id=[music] to listen now!
+<html>
+<p>dear [name],</p>
+<p><b>[politician]</b> needs your help in supporting their new bill. Log in and sign their petition with your Facebook account at <a href="http://totallylegit.com">http://www.[politician].com</a> to support their cause!</p>
+</html>
