@@ -12,9 +12,5 @@ class VictimList
   
   def initialize
 	@victims = Array.new
-	
-	if $test
-	  @victims.push(Victim.new)
-	end
   end
 end

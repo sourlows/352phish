@@ -21,19 +21,10 @@ class FacebookAPI < AbstractAPI
       }
       app_id = $authDirectory["Facebook"]["id"]
 	  app_secret = $authDirectory["Facebook"]["secret"]
-	  #@oauth = Koala::Facebook::OAuth.new(app_id, app_secret)
-	  #@token = @oauth.get_app_access_token
-	  #@graph = Koala::Facebook::API.new(@token)
-	  #@graph = Koala::Facebook::API.new
 	  puts("enter user access token: ")
 	  token = gets
 	  @graph = Koala::Facebook::API.new(token)
 	  
-	  #profile = @graph.get_object("dustin.walker.144")
-	  #pp profile
-	  
-	  #likes = @graph.get_connections("dustin.walker.144", "likes")
-	  #pp likes
     else
       abort("no authentication information for Facebook found")
     end
@@ -60,6 +51,10 @@ class FacebookAPI < AbstractAPI
     
 	#get the user's friends
 	deepFriends = @graph.get_connections("me", "friends")
+	
+	if($limit && $limit < deepFriends.count)
+	  deepFriends = deepFriends[0,$limit]
+	end
 	
 	#get each friend's "likes"
 	deepFriends.each { |friend|

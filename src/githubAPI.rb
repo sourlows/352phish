@@ -51,14 +51,30 @@ class GithubAPI < AbstractAPI
     
     #set octokit options, auto paginate is a bad idea when you combine it with all_users (memory overflow)
     Octokit.auto_paginate = false
-    Octokit.per_page = 100
+	if($limit && $limit < 100)
+      Octokit.per_page = $limit
+	else
+	  Octokit.per_page = 100
+	end
+	
     
     #get a shallow list of users
     userList = Octokit.all_users
-	@paginationLimit.times do
-	  userList.concat Octokit.last_response.rels[:next].get.data
+	if($limit)
+	  numPages = ($limit / Octokit.per_page.to_f).ceil
+	  numPages.times do
+	    userList.concat Octokit.last_response.rels[:next].get.data
+	  end
+	else
+	  @paginationLimit.times do
+	    userList.concat Octokit.last_response.rels[:next].get.data
+	  end
 	end
     detailedUsers = Array.new
+	
+	if($limit && $limit < userList.count)
+	  userList = userList[0, $limit]
+	end
     
     #get a deeper user object for each shallow user entry and store it in our detailedUsers arrays
     userList.each { |usr|

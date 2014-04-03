@@ -17,8 +17,7 @@ targetAPIs = Array.new
 #true if verbose mode (print out what is happening with requests) is enabled
 $verbose = false
 
-#true if test mode (various test/stub functions) is enabled
-$test = false
+$limit = nil
 
 #the name of the file corresponding to the input email template
 $file = nil
@@ -41,26 +40,22 @@ end
 # the --test flag should not be used by anyone who doesn't know what they are doing or you'll get unanticipated behaviour
 def getUserOptions
   opts = Trollop::options do
-    opt :verbose, "print out all kinds of information about http requests"
+    opt :verbose, "print out all kinds of information about execution"
     opt :file, "specify an input email template file", :type => :string
 	opt :auth, "specify an file containing authentication info", :type => :string
-    opt :test, "enable test functionality"
+    opt :limit, "specify the maximum number of users you want to query from an API", :type => :integer
   end
   
   $verbose = opts[:verbose]
   $file = opts[:file]
   $auth = opts[:auth]
-  $test = opts[:test]
+  $limit = opts[:limit]
   
   #kill the program if the user specifies a non existent template file
   Trollop::die :file, "must exist" unless File.exist?($file) if $file
   
   #kill the program if the user specifies a non existent authorization file
   Trollop::die :auth, "must exist" unless File.exist?($auth) if $auth
-  
-  if $test
-    pp(opts)
-  end
 end
 
 def generateEmails
@@ -93,7 +88,6 @@ end
 
 #MAIN ENTRY POINT
 getUserOptions
-pp VictimList.instance.victims if $test
 querySet = EmailHandler.instance.getUserQuery if $file
 parseAuth if $auth
 
