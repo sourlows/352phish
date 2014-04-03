@@ -1,4 +1,4 @@
 <html>
 <p>dear [name],</p>
-<p><b>[politician]</b> needs your help in supporting their new bill. Log in and sign their petition with your Facebook account at <a href="http://totallylegit.com">http://www.[politician].com</a> to support their cause!</p>
+<p><b>[politician]</b> needs your help in supporting their new bill. Log in and sign their petition with your Facebook account at <a href="http://totallylegit.com">http://www.[_politician].com</a> to support their cause!</p>
 </html>

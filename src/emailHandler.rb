@@ -23,6 +23,7 @@ class EmailHandler
 	  terms.each { |term|
 	    termString = term.to_s
 	    composed.gsub!(/\[#{termString}\]/, vic.attributes[term])
+		composed.gsub!(/\[_#{termString}\]/, vic.attributes[term].gsub(/[^0-9a-zA-Z]+/, "").downcase)
 	  }
 	  writeEmailToDisk(composed)
 	}
@@ -36,7 +37,7 @@ class EmailHandler
 	
 	@emailString = IO.read($file)
 	
-	stringTerms = @emailString.scan(/(?<=\[)(.*?)(?=\])/)
+	stringTerms = @emailString.scan(/(?<=\[)([^_].*?)(?=\])/)
 	stringTerms.flatten!
 	
 	terms = stringTerms.map { |s| s.to_sym }
